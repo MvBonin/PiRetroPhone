@@ -1,18 +1,24 @@
-DIAL_PIN = 19
-HANGUP_PIN = 13
+DIAL_PIN = 10
+
+GREEN_PIN = 23
+HANGUP_PIN = 24
+
+RING_OUT = 4
+
 
 """
-0 ist vorwahl
-1 für Notrufe
-2 Kontakte
-3 Kontakte Speichern
-4 
-5 Alarm
-6 Wetter
-7 
-8 
-9 OFF
+###0 ist vorwahl
+###1 fuer Notrufe
+###2 Kontakte
+###3 Kontakte Speichern#
+###4 
+###5 Alarm
+###6 Wetter
+###7 
+###8 
+###9 OFF
 """
+
 NUM_CONTACTS = 2
 NUM_SAVE_CONTACTS = 3
 
