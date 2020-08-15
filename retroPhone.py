@@ -21,6 +21,8 @@ dial = dial.Dial()
 
 phone = phone.Phone()
 
+incomingCall = None
+
 ##We want to do seperate stuff when inside a call
 
 
@@ -34,7 +36,10 @@ def HANGUP_BTN_EVENT(channel):
 			phone.hangupCall()
 	else:
 		print("Abgehoben")
-		
+		if incomingCall != None:
+			print("Incoming call is answered")
+			phone.answerCall(incomingCall)
+			incomingCall = None
 
 
 GPIO.add_event_detect(c.HANGUP_PIN, GPIO.BOTH, callback=HANGUP_BTN_EVENT, bouncetime=90)
@@ -69,6 +74,9 @@ try:
 		if hangupState == GPIO.LOW:
 			##Is Picked up
 			print("Pick Up")
+		incomingCall = phone.getIncomingCall()
+		if incomingCall != None:
+			print("Call incoming")
 		time.sleep(0.2)
 except:
 	phone.close()

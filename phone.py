@@ -24,6 +24,17 @@ class Phone(object):
 				print("Online modem: %s" % properties['Online'])
 				if properties['Online'] == 1:
 					return path
+	def getIncomingCall(self):
+		calls = self.vcm.GetCalls()
+		for path, properties in calls:
+			if properties['State'] == "incoming":
+				return path
+		pass
+
+	def answerCall(self, path):
+		call = dbus.Interface(self.bus.get_object('org.ofono', path), 'org.ofono.VoiceCall')
+		call.Answer()
+
 	def __init__(self):
 		dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 		print("Phone set up")
@@ -49,6 +60,11 @@ class Phone(object):
 		self._thread.start()
 		self.org_ofono_obj.connect_to_signal("CallAdded", self.set_call_in_progress, dbus_interface='org.ofono.VoiceCallManager')
 		self.org_ofono_obj.connect_to_signal("CallRemoved", self.set_call_ended, dbus_interface='org.ofono.VoiceCallManager')
+		##Incoming calls
+		calls = self.vcm.GetCalls()
+
+
+
 	def set_call_in_progress(self, object, properties):
 		print("Call in progress")
 		self.call_in_progress = True
