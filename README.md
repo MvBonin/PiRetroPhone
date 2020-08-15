@@ -22,3 +22,29 @@ Ausschalten:
 
 0: Normaler Anruf startet mit 0
 
+
+
+---
+
+Normaler Nicht-Anrufs State:
+    - Bei Anruf klingeln
+        - Wenn Abgehoben drangehen, Klingeln beenden
+
+    - Alarm
+    - Beim abheben a Ton tuten, wenn verbunden. Wenn nicht verbunden per BT, kurze Tute
+
+    - Hinten Knopfdruck:  Klingeln bis zum abheben
+
+Abgehoben nicht-Anrufs State:
+    - a 440 spielen je nach connection
+    - Wählen
+        -> 1-2-3-4-5-6-7-8-9
+        -> 0 Anruf, 2 Kontakt anrufen, 3 Kontakt speichern, 5 Alarm, 6 Wetter in Gö, 9 Herunterfahren
+
+
+Während Anruf:
+    - Orange Knopf: Lauter - Leiser bei antippen
+    - Orange Knopf halten + Zahl wählen: Zitat einspielen
+    - Auflegen
+
+---
