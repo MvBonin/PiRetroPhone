@@ -3,7 +3,7 @@ DIAL_PIN = 10
 GREEN_PIN = 23
 HANGUP_PIN = 24
 
-RING_OUT = 4
+RING_PIN = 4
 
 
 """
