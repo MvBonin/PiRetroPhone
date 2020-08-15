@@ -73,3 +73,5 @@ class Phone(object):
 				#self.start_file("/home/pi/telefonoa/format_incorrect.wav")
 			else:
 				print(name)
+	def close(self):
+		self.loop.quit()

@@ -30,7 +30,7 @@ def HANGUP_BTN_EVENT(channel):
 	if hangupState == GPIO.LOW:
 		print("Aufgelegt")
 		##auflegen mit Ofono
-		if True:
+		if phone.call_in_progress:
 			phone.hangupCall()
 	else:
 		print("Abgehoben")
@@ -44,8 +44,8 @@ def greenBtnPushed(sec):
 	print("Green Btn pushed for ", sec, " Seconds.")
 
 def greenBtnFiveSec():
-	print("5 Sec um")
-	phone.call("017693204140")
+	print("5 Sec um, trying to call")
+	phone.callNumber("017693204140")
 
 ### Main Loop
 try:
@@ -71,4 +71,5 @@ try:
 			print("Pick Up")
 		time.sleep(0.2)
 except:
+	phone.close()
 	GPIO.cleanup()
