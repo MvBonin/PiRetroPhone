@@ -35,19 +35,19 @@ try:
 	while True:
 		hangupState = GPIO.input(c.HANGUP_PIN)
 		button_state_green = GPIO.input(c.GREEN_PIN)
-        
+
 		if button_state_green == GPIO.LOW:
-		    nowTime = time.time()
+			nowTime = time.time()
 			if greenButtonStart == float(0):
 				greenButtonStart = time.time()
 			elif (nowTime - greenButtonStart) >= float(5):
 				print("5 Sekunden um")
+			print("Green button press")
 		else:
 			if greenButtonStart != float(0):
 				nowTime =time.time()
 				print("Time elapsed for green Button: ", nowTime - greenButtonStart)
 				greenButtonStart = float(0)
-		print("Green button press")
 		time.sleep(0.2)
 except:
 	GPIO.cleanup()
