@@ -16,7 +16,14 @@ class Phone(object):
 		self.manager = dbus.Interface(self.bus.get_object('org.ofono', '/'), 'org.ofono.Manager')
 	def getVCM(self):
 		return dbus.Interface(self.bus.get_object('org.ofono', self.modem), 'org.ofono.VoiceCallManager')
-
+	def getOnlineModem(self, manager):
+		##self.modems = manager.getModems()
+		for path, properties in self.modems:
+			##properties = modem.GetProperties()
+			if 'Online' in properties:
+				print("Online modem: %s" % properties['Online'])
+				if properties['Online'] == 1:
+					return path
 	def __init__(self):
 		dbus.mainloop.glib.DBusGMainLoop(set_as_default=True)
 		print("Phone set up")
@@ -24,8 +31,9 @@ class Phone(object):
 		self.manager = dbus.Interface(self.bus.get_object('org.ofono', '/'), 'org.ofono.Manager')
 
 		self.modems = self.manager.GetModems()
-		self.modem = self.modems[0][0]
-		print(self.modem)
+		self.modem = self.getOnlineModem(self.manager)
+
+		print("Modem: %s" % self.modem)
 		self.org_ofono_obj = self.bus.get_object('org.ofono', self.modem)
 		self.vcm = dbus.Interface(self.org_ofono_obj, 'org.ofono.VoiceCallManager')
 
