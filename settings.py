@@ -28,13 +28,10 @@ class Settings:
             self.writeData()
     def setAlarm(self, timeStr):
         ##got 4 or 3 character time String.
-        print("Alarmset fnctn")
         if len(timeStr) == 3 and int(timeStr[:2]) < 61:
-            print("Valid timestring")
             self.data["alarm"] = timeStr
         if len(timeStr) == 4:
             if int(timeStr[2:]) < 25 and int(timeStr[:2]) < 61:
-                print("Valid timestring")
                 self.data["alarm"] = timeStr
         self.writeData()
 

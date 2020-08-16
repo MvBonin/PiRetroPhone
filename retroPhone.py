@@ -4,6 +4,8 @@ import phone
 import ringer
 import settings
 
+import os
+
 import time
 import RPi.GPIO as GPIO
 
@@ -106,6 +108,9 @@ def processNumber(number):
 	if number == None or number == "":
 		pass
 	num = list(number)
+	if int(num[0]) == 0 or int(num[0]) == 1:
+		#normal call
+		call(number)
 	if int(num[0]) == c.NUM_CONTACTS:
 		print("Contacts")
 		if len(number) >= 1:
@@ -143,7 +148,13 @@ def processNumber(number):
 	if int(num[0]) == c.NUM_RINGTONE:
 		print("Ringtone")
 	if int(num[0]) == c.NUM_OFF:
-		print("Save Contacts")
+		ringer.singleRing(5)
+		time.sleep(0.3)
+		ringer.singleRing(5)
+		time.sleep(0.3)
+		ringer.singleRing(5)
+		os.system("sudo shutdown -h now")
+
 
 
 ### Main Loop

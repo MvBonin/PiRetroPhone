@@ -7,8 +7,8 @@ Kontakte Speichern:
 Kontakt anrufen: 
     - 2 Wählen, dann Zahl, unter der der Kontakt gespeichert ist.
 Alarm:
-    - 5 Wählen, dann Kommt kurze Erklärung, dann Uhrzeit wählen im Format hhmm, dann kommt Bestätigung für Wecker
-        - evtl led leuchten od blinken
+    - 5 Wählen, dann Uhrzeit wählen im Format hhmm oder hmm, dann kommt Bestätigung für Wecker
+        - Klingel
     - erneut 5 Wählen: Wecker geht wieder aus, inkl. Bestätigung
     - Wecker klingelt:
         - Höhrer abnehmen: Klingeln hört auf, Stimme sagt:
