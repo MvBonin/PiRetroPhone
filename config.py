@@ -15,7 +15,7 @@ RING_PIN = 4
 ###1 fuer Notrufe
 ###2 Kontakte
 ###3 Kontakte Speichern#
-###4 
+###4 Klingelton
 ###5 Alarm
 ###6 Wetter
 ###7 
@@ -25,7 +25,7 @@ RING_PIN = 4
 
 NUM_CONTACTS = 2
 NUM_SAVE_CONTACTS = 3
-
+NUM_RINGTONE = 4
 
 NUM_ALARM = 5
 NUM_WEATHER = 6

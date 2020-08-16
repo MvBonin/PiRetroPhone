@@ -2,6 +2,7 @@ import config as c
 import dial
 import phone
 import ringer
+import settings
 
 import time
 import RPi.GPIO as GPIO
@@ -26,6 +27,7 @@ greenButtonStart = float(0)
 
 
 
+s = settings.Settings()
 
 phone = phone.Phone()
 ringer = ringer.Ringer()
@@ -51,8 +53,9 @@ def afterDialListening():
 	global isDialListening
 	global interruptNumber
 	isDialListening = False
-	if not interruptNumber:
+	if not interruptNumber and not dial.number == "":
 		print("Dial done, number %s" % dial.number)
+		processNumber(dial.number)
 	else:
 		interruptNumber = False
 
@@ -94,6 +97,38 @@ def greenBtnFiveSec():
 	#phone.callNumber("017693204140")
 	ringer.start()
 
+def dial(number):
+	if not phone.call_in_progress:
+		phone.callNumber(number)
+
+def processNumber(number):
+	global s
+	if number == None or number == "":
+		pass
+	num = list(number)
+	if int(num[0]) == c.NUM_CONTACTS:
+		print("Contacts")
+		if len(number) >= 1:
+			print("getting contact %s" % num[1])
+			contactNr = s.getContact(num[1])
+			print("Number of contact: %s" % contactNr)
+			if contactNr != "":
+				dial(contactNr)
+	if int(num[0]) == c.NUM_SAVE_CONTACTS:
+		print("Save Contacts")
+		if len(number) >= 1:
+			##Save Contact
+			print("Saving Nr: %s to slot: %s" % (number[2:], num[1]))
+	if int(num[0]) == c.NUM_ALARM:
+		print("Save Contacts")
+	if int(num[0]) == c.NUM_WEATHER:
+		print("Save Contacts")
+	if int(num[0]) == c.NUM_RINGTONE:
+		print("Ringtone")
+	if int(num[0]) == c.NUM_OFF:
+		print("Save Contacts")
+
+
 ### Main Loop
 try:
 	while True:
@@ -124,7 +159,7 @@ try:
 
 		if hangupState == GPIO.LOW:
 			##Is Picked up
-			print("Pick Up")
+			#print("-")
 			if ringer.state == True:
 				ringer.stop()
 			if not dial.isListening() and not isDialListening:

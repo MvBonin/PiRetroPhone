@@ -16,6 +16,7 @@ class Ringer(object):
 		self.singleRingCount = 30
 		self.fillRingList()
 		self.currentRingStyle = "-.-."
+		GPIO.output(c.RING_PIN, GPIO.HIGH)
 
 	def close(self):
 		print("Ringer closing itself")
