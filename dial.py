@@ -10,7 +10,7 @@ class Dial:
 		GPIO.setup(c.DIAL_PULSE_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 		GPIO.setup(c.DIAL_CONTROL_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
-		GPIO.add_event_detect(c.DIAL_CONTROL_PIN, GPIO.BOTH)
+		#GPIO.add_event_detect(c.DIAL_CONTROL_PIN, GPIO.BOTH)
 		self.lastState = GPIO.input(c.DIAL_CONTROL_PIN)
 		self.waitingSingleNumber = False
 
@@ -50,7 +50,9 @@ class Dial:
 		num = None
 		startTime = time.time()
 		self.lastState = GPIO.input(c.DIAL_CONTROL_PIN)
+		self.curState = GPIO.input(c.DIAL_CONTROL_PIN)
 		#print("Waiting for single Number")
+		self.pulse = 0
 		while self.waitingSingleNumber:
 			if time.time() - startTime > self.timeout:
 				return 11
