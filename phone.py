@@ -18,6 +18,8 @@ class Phone(object):
 		return dbus.Interface(self.bus.get_object('org.ofono', self.modem), 'org.ofono.VoiceCallManager')
 	def getOnlineModem(self, manager):
 		##self.modems = manager.getModems()
+		self.manager = dbus.Interface(self.bus.get_object('org.ofono', '/'), 'org.ofono.Manager')
+		self.modems = self.manager.GetModems()
 		for path, properties in self.modems:
 			##properties = modem.GetProperties()
 			if 'Online' in properties:
