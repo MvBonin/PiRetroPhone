@@ -1,6 +1,9 @@
 import config as c
 import dial
 import phone
+import ringer
+
+
 import time
 import RPi.GPIO as GPIO
 
@@ -20,6 +23,7 @@ greenButtonStart = float(0)
 dial = dial.Dial()
 
 phone = phone.Phone()
+ringer = ringer.Ringer()
 
 incomingCall = None
 
@@ -50,7 +54,8 @@ def greenBtnPushed(sec):
 
 def greenBtnFiveSec():
 	print("5 Sec um, trying to call")
-	phone.callNumber("017693204140")
+	#phone.callNumber("017693204140")
+	ringer.ring(ringer.getRingStyle(0))
 
 ### Main Loop
 try:

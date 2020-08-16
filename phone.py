@@ -24,6 +24,16 @@ class Phone(object):
 				print("Online modem: %s" % properties['Online'])
 				if properties['Online'] == 1:
 					return path
+	def waitForOnlineModem(self, manager):
+		print("Waiting for online Modem")
+		found = False
+		while found == False:
+			modem = self.getOnlineModem( manager )
+			if modem != None:
+				found = True
+				return modem
+			time.sleep(0.5)
+
 	def getIncomingCall(self):
 		calls = self.vcm.GetCalls()
 		for path, properties in calls:
@@ -42,7 +52,8 @@ class Phone(object):
 		self.manager = dbus.Interface(self.bus.get_object('org.ofono', '/'), 'org.ofono.Manager')
 
 		self.modems = self.manager.GetModems()
-		self.modem = self.getOnlineModem(self.manager)
+
+		self.modem = self.waitForOnlineModem(self.manager)
 
 		print("Modem: %s" % self.modem)
 		self.org_ofono_obj = self.bus.get_object('org.ofono', self.modem)
