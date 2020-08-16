@@ -8,7 +8,7 @@ import time
 import RPi.GPIO as GPIO
 
 #########################
-##This is the main File##
+##This is the main File##a
 #########################
 GPIO.setmode(GPIO.BCM)
 
@@ -97,7 +97,7 @@ def greenBtnFiveSec():
 	#phone.callNumber("017693204140")
 	ringer.start()
 
-def dial(number):
+def call(number):
 	if not phone.call_in_progress:
 		phone.callNumber(number)
 
@@ -113,14 +113,31 @@ def processNumber(number):
 			contactNr = s.getContact(num[1])
 			print("Number of contact: %s" % contactNr)
 			if contactNr != "":
-				dial(contactNr)
+				call(contactNr)
 	if int(num[0]) == c.NUM_SAVE_CONTACTS:
 		print("Save Contacts")
 		if len(number) >= 1:
 			##Save Contact
 			print("Saving Nr: %s to slot: %s" % (number[2:], num[1]))
+			s.setContact(num[1], number[2:])
+			ringer.singleRing(20)
 	if int(num[0]) == c.NUM_ALARM:
-		print("Save Contacts")
+		print("Set Alarm") #51430
+		
+		if len(number) == 5 or len(number) == 4:
+			print("time: %s:%s" %(number[1:-2], number[-2:]))
+			print("Setting Alarm")
+			s.setAlarm(number[1:])
+			ringer.singleRing(20)
+			time.sleep(0.5)
+		elif s.isAlarmSet():
+			print("Deleting Alarm")
+			s.deleteAlarm()
+			ringer.singleRing(10)
+			time.sleep(0.5)
+			ringer.singleRing(10)
+
+		
 	if int(num[0]) == c.NUM_WEATHER:
 		print("Save Contacts")
 	if int(num[0]) == c.NUM_RINGTONE:
@@ -178,6 +195,5 @@ try:
 		time.sleep(0.2)
 except:
 	phone.close()
-	dial.stop()
 	ringer.stop()
 	GPIO.cleanup()

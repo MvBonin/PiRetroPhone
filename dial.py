@@ -6,7 +6,7 @@ import threading
 class Dial:
 	def __init__(self):
 		self.pulse = 0
-		GPIO.setmode(GPIO.BCM)
+		#GPIO.setmode(GPIO.BCM)
 		GPIO.setup(c.DIAL_PULSE_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 		GPIO.setup(c.DIAL_CONTROL_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
