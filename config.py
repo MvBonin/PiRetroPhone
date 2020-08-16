@@ -1,6 +1,8 @@
 DIAL_CONTROL_PIN = 21
 DIAL_PULSE_PIN = 20
 
+##Timeout in Sec for the Dial (to finish input)
+DIAL_TIMEOUT = 5
 
 GREEN_PIN = 23
 HANGUP_PIN = 24

@@ -3,7 +3,6 @@ import dial
 import phone
 import ringer
 
-
 import time
 import RPi.GPIO as GPIO
 
@@ -20,30 +19,61 @@ GPIO.setup(c.GREEN_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 hangupState = GPIO.input(c.HANGUP_PIN)
 greenButtonStart = float(0)
-dial = dial.Dial()
+
+
+
+
+
+
+
 
 phone = phone.Phone()
 ringer = ringer.Ringer()
 
+dial = dial.Dial()
+dial.start()
+
+isDialListening = False
 incomingCall = None
 
-##We want to do seperate stuff when inside a call
+##Interrupt number event
+interruptNumber = False
+##Start listening to the dial
+def startDialListen():
+	global isDialListening
+	if not isDialListening:
+		print("Let the Dial listen")
+		dial.listen()
+		isDialListening = True
 
-
+###EVENT: After Dialing finished
+def afterDialListening():
+	global isDialListening
+	global interruptNumber
+	isDialListening = False
+	if not interruptNumber:
+		print("Dial done, number %s" % dial.number)
+	else:
+		interruptNumber = False
 
 def HANGUP_BTN_EVENT(channel):
+	global incomingCall
+	global isDialListening
+	global interruptNumber
 	#state = GPIO.input(c.HANGUP_PIN)
 	if hangupState == GPIO.LOW:
 		print("Aufgelegt")
 		##auflegen mit Ofono
 		if phone.call_in_progress:
 			phone.hangupCall()
-	else:
-		print("Abgehoben")
-		if incomingCall != None:
-			print("Incoming call is answered")
-			phone.answerCall(incomingCall)
-			incomingCall = None
+		
+		#evtl stop dial
+		##Interrupt number recognition
+		interruptNumber = True
+		dial.stopListen()
+		
+		
+
 
 
 GPIO.add_event_detect(c.HANGUP_PIN, GPIO.BOTH, callback=HANGUP_BTN_EVENT, bouncetime=90)
@@ -51,17 +81,31 @@ GPIO.add_event_detect(c.HANGUP_PIN, GPIO.BOTH, callback=HANGUP_BTN_EVENT, bounce
 
 def greenBtnPushed(sec):
 	print("Green Btn pushed for ", sec, " Seconds.")
+	if not dial.isListening() and not isDialListening:
+		num = dial.number
+		print(num)
+	else:
+		print("Still listening on dial?")
+
+
 
 def greenBtnFiveSec():
 	print("5 Sec um, trying to call")
 	#phone.callNumber("017693204140")
-	ringer.ring(ringer.getRingStyle(0))
+	ringer.start()
 
 ### Main Loop
 try:
 	while True:
 		hangupState = GPIO.input(c.HANGUP_PIN)
 		button_state_green = GPIO.input(c.GREEN_PIN)
+
+		if isDialListening == True and not dial.isListening():
+			##Listening to the dial has stopped
+			afterDialListening()
+			
+			
+		incomingCall = phone.getIncomingCall()
 
 		if button_state_green == GPIO.LOW:
 			nowTime = time.time()
@@ -76,13 +120,29 @@ try:
 				greenBtnPushed((nowTime - greenButtonStart))
 				greenButtonStart = float(0)
 
+		
+
 		if hangupState == GPIO.LOW:
 			##Is Picked up
 			print("Pick Up")
-		incomingCall = phone.getIncomingCall()
+			if ringer.state == True:
+				ringer.stop()
+			if not dial.isListening() and not isDialListening:
+				startDialListen()
+
+			if incomingCall != None:
+				print("Incoming call is answered")
+				phone.answerCall(incomingCall)
+				incomingCall = None
+		
+		
 		if incomingCall != None:
 			print("Call incoming")
+			if ringer.state == False:
+				ringer.start()
 		time.sleep(0.2)
 except:
 	phone.close()
+	dial.stop()
+	ringer.stop()
 	GPIO.cleanup()
