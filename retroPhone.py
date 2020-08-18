@@ -69,7 +69,7 @@ def HANGUP_BTN_EVENT(channel):
 	if hangupState == GPIO.LOW:
 		print("Aufgelegt")
 		##auflegen mit Ofono
-		if phone.call_in_progress:
+		if not incomingCall and phone.call_in_progress:
 			phone.hangupCall()
 		
 		#evtl stop dial

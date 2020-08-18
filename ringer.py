@@ -46,6 +46,8 @@ class Ringer(object):
 	def singleRing(self, timer):
 		i = 0
 		while i <= int(timer):
+			if self.state == False:
+				pass
 			time.sleep(self.sleepLow)
 			GPIO.output(c.RING_PIN, GPIO.HIGH)
 			time.sleep(self.sleepHigh)

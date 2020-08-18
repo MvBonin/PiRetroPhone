@@ -22,8 +22,9 @@ class Phone(object):
 		self.modems = self.manager.GetModems()
 		for path, properties in self.modems:
 			##properties = modem.GetProperties()
+			print("Waiting for online bt device")
 			if 'Online' in properties:
-				print("Online modem: %s" % properties['Online'])
+				#print("Online modem: %s" % properties['Online'])
 				if properties['Online'] == 1:
 					return path
 	def waitForOnlineModem(self, manager):
