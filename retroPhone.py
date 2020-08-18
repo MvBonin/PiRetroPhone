@@ -3,7 +3,7 @@ import dial
 import phone
 import ringer
 import settings
-
+import audio
 import os
 
 import time
@@ -33,7 +33,7 @@ s = settings.Settings()
 
 phone = phone.Phone()
 ringer = ringer.Ringer()
-
+audio = audio.Audio()
 dial = dial.Dial()
 dial.start()
 
@@ -86,11 +86,9 @@ GPIO.add_event_detect(c.HANGUP_PIN, GPIO.BOTH, callback=HANGUP_BTN_EVENT, bounce
 
 def greenBtnPushed(sec):
 	print("Green Btn pushed for ", sec, " Seconds.")
-	if not dial.isListening() and not isDialListening:
-		num = dial.number
-		print(num)
-	else:
-		print("Still listening on dial?")
+	#audio.textToSpeech("Hallo", "/home/pi/piano2.wav")
+	#time.sleep(0.3)
+	audio.play_file("/home/pi/piano2.wav")
 
 
 

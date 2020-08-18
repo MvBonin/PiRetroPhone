@@ -81,21 +81,23 @@ class Dial:
 		print("Waiting for Numbers")
 		#self.startTime = time.time()
 		self.running = True
-		while self.running:
-			##Wait for numbers, Out them after timeout
-			self.lastState = GPIO.input(c.DIAL_CONTROL_PIN)
-			singleNum = self.getSingleNumber()
-			if singleNum != None  and self.isListening():
-				if singleNum == 10:
-					singleNum = 0
-				if singleNum == 11:
-					### 11: timeout!
-					#self.running = False
-					self.listenState = False
-				else:
-					print("Put Number %s in queue" % singleNum)
-					self.addToNumber(singleNum)
-		
+		try:
+			while self.running:
+				##Wait for numbers, Out them after timeout
+				self.lastState = GPIO.input(c.DIAL_CONTROL_PIN)
+				singleNum = self.getSingleNumber()
+				if singleNum != None  and self.isListening():
+					if singleNum == 10:
+						singleNum = 0
+					if singleNum == 11:
+						### 11: timeout!
+						#self.running = False
+						self.listenState = False
+					else:
+						print("Put Number %s in queue" % singleNum)
+						self.addToNumber(singleNum)
+		except:
+			self.stop()
 				
 
 	def start(self):
@@ -107,3 +109,4 @@ class Dial:
 
 	def stop(self):
 		self.running = False
+		#GPIO.cleanup()
