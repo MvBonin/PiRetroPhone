@@ -10,7 +10,7 @@ import time
 import RPi.GPIO as GPIO
 
 #########################
-##This is the main File##a
+##This is the main File##
 #########################
 GPIO.setmode(GPIO.BCM)
 
@@ -22,11 +22,6 @@ GPIO.setup(c.GREEN_PIN, GPIO.IN, pull_up_down=GPIO.PUD_UP)
 
 hangupState = GPIO.input(c.HANGUP_PIN)
 greenButtonStart = float(0)
-
-
-
-
-
 
 
 s = settings.Settings()
@@ -88,18 +83,42 @@ def greenBtnPushed(sec):
 	print("Green Btn pushed for ", sec, " Seconds.")
 	#audio.textToSpeech("Hallo", "/home/pi/piano2.wav")
 	#time.sleep(0.3)
-	audio.play_file("/home/pi/piano2.wav")
+	#audio.play_file("/home/pi/piano2.wav")
 
 
 
 def greenBtnFiveSec():
 	print("5 Sec um, trying to call")
 	#phone.callNumber("017693204140")
-	ringer.start()
+	#ringer.start()
+
+def greenBtnTenSec():
+	print("10 sec Button pressed")
+	ringer.singleRing(3)
+	time.sleep(0.2)
+	ringer.singleRing(3)
+	time.sleep(0.2)
+	ringer.singleRing(3)
+	exit()
 
 def call(number):
 	if not phone.call_in_progress:
 		phone.callNumber(number)
+
+def ringtoneSetter(number):
+	global s
+	global ringer
+	if number == None or number == "":
+		pass
+	## Ringtones von 1 - 0, Speichere den, bei dem ich auflege, also den, der hier gewaehlt wurde.
+	## vllt so, dass man einzelne waehlen kann
+	## Oder umschalten zwischen ihnen mit Button:
+	print("Ringtone Number %s" % number)
+	if int(number) <= ringer.getRingListSize():
+		print("Ringtone set")
+		s.setRingtone(number)
+		ringer.start()
+
 
 def processNumber(number):
 	global s
@@ -142,9 +161,10 @@ def processNumber(number):
 
 		
 	if int(num[0]) == c.NUM_WEATHER:
-		print("Save Contacts")
+		print("Weather")
 	if int(num[0]) == c.NUM_RINGTONE:
 		print("Ringtone")
+		ringtoneSetter(number[1:])
 	if int(num[0]) == c.NUM_OFF:
 		ringer.singleRing(5)
 		time.sleep(0.3)
@@ -172,8 +192,10 @@ try:
 			nowTime = time.time()
 			if greenButtonStart == float(0):
 				greenButtonStart = time.time()
-			elif (nowTime - greenButtonStart) >= float(5):
-				greenBtnFiveSec()
+			#elif (nowTime - greenButtonStart) >= float(5):
+			#	greenBtnFiveSec()
+			elif (nowTime - greenButtonStart) >= float(10):
+				greenBtnTenSec()
 		else:
 			if greenButtonStart != float(0):
 				nowTime =time.time()

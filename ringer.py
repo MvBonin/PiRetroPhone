@@ -2,7 +2,8 @@ import config as c
 import RPi.GPIO as GPIO
 import time
 import threading
-
+import settings as s
+s = s.Settings()
 class Ringer(object):
 	def __init__(self):
 		###Set up the Ringer GPIO
@@ -15,7 +16,7 @@ class Ringer(object):
 		self.sleepHigh = 0.008
 		self.singleRingCount = 30
 		self.fillRingList()
-		self.currentRingStyle = "-.-."
+		self.currentRingStyle = "-.-." #
 		GPIO.output(c.RING_PIN, GPIO.HIGH)
 
 	def close(self):
@@ -30,12 +31,14 @@ class Ringer(object):
 	def getRingListSize(self):
 		return len(self.RingStyles)
 
-	def getRingStyle(index):
-		return "--.."
+	def getRingStyle(self,index):
+		#return "--.."
 		if len(self.RingStyles) > index:
 			return self.RingStyles[index]
 		else:
+			print("Ringer: index out of bounds, using Ringstyle 0")
 			return self.RingStyles[0]
+			######NICHT so sondern element oder sowas, sonst kommt nur ein .
 
 	def isCharacterRing(self, character):
 		if character == '-':
@@ -74,6 +77,7 @@ class Ringer(object):
 		if self.state == False:
 			self.t = threading.Thread(target = self.ring)
 			print("Starting Ringing with ringstyle %s" % self.currentRingStyle)
+			print("Ringstyle %s " % self.getRingStyle(int(s.getRingtone())))
 			self.t.start()
 	
 	def stop(self):

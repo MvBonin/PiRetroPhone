@@ -45,7 +45,7 @@ class Audio:
             pass
 
         stream = alsaaudio.PCM(type=alsaaudio.PCM_PLAYBACK, 
-            mode=alsaaudio.PCM_NORMAL, periodsize=self.CHUNK , device="plughw:1,0")
+            mode=alsaaudio.PCM_NORMAL, periodsize=self.CHUNK , device="plughw:1,0") #plughw:1,0
         stream.setchannels(f.getnchannels())
         stream.setrate(f.getframerate())
         if f.getsampwidth() == 1:
